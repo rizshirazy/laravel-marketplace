@@ -24,11 +24,11 @@
                         <div class="col-lg-6 text-center">
                             <img src="/images/success.svg" alt="" class="mb-4" />
                             <h2>
-                                Transaction Processed!
+                                Welcome to Store
                             </h2>
                             <p>
-                                Silahkan tunggu konfirmasi email dari kami dan <br />
-                                kami akan menginformasikan resi secept mungkin!
+                                Kamu sudah berhasil terdaftar <br />
+                                bersama kami. Let’s grow up now.
                             </p>
                             <div>
                                 <a class="btn btn-success w-50 mt-4" href="/dashboard.html">
