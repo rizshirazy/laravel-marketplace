@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
@@ -45,8 +46,9 @@ Route::group(['prefix' => 'dashboard'], function () {
 });
 
 Route::group(
-    ['prefix' => 'admin', 'namespace' => 'Admin'],
+    ['prefix' => 'admin'],
     function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+        Route::resource('/categories', AdminCategoryController::class)->names('admin.categories');
     }
 );

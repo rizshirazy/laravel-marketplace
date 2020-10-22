@@ -26,12 +26,12 @@
             <img src="/images/admin-logo.svg" alt="" class="my-4" style="max-width: 150px" />
           </div>
           <div class="list-group list-group-flush">
-            <a href="/dashboard.html"
+            <a href="{{ route('admin.dashboard') }}"
                class="list-group-item list-group-item-action">Dashboard</a>
             <a href="#"
                class="list-group-item list-group-item-action">Products</a>
-            <a href="#"
-               class="list-group-item list-group-item-action">Categories</a>
+            <a href="{{ route('admin.categories.index') }}"
+               class="list-group-item list-group-item-action {{ (request()->is('admin/categories*')) ? 'active' : '' }}">Categories</a>
             <a href="#"
                class="list-group-item list-group-item-action">Transactions</a>
             <a href="#"
@@ -101,8 +101,9 @@
 
     <!-- Bootstrap core JavaScript -->
     @stack('prepend-scripts')
-    <script src="/vendor/jquery/jquery.slim.min.js"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.22/datatables.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
       AOS.init();
@@ -114,6 +115,7 @@
                   $("#wrapper").toggleClass("toggled");
               });
     </script>
+
     @stack('addon-scripts')
   </body>
 
