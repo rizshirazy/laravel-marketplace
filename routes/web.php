@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -42,3 +43,10 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/settings', [DashboardSettingController::class, 'store'])->name('dashboard.settings.store');
     Route::get('/account', [DashboardSettingController::class, 'account'])->name('dashboard.settings.account');
 });
+
+Route::group(
+    ['prefix' => 'admin', 'namespace' => 'Admin'],
+    function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    }
+);
