@@ -8,6 +8,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
+    <link rel="icon" href="/images/admin-logo.svg">
     <title>@yield('title')</title>
 
     {{-- Styles --}}

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
@@ -59,7 +61,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.admin.category.create');
     }
 
     /**
@@ -68,9 +70,16 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+        $data = $request->all();
+
+        $data['slug'] = Str::slug($request->name);
+        $data['image'] =  $request->file('image')->store('assets/category', 'public');
+
+        Category::create($data);
+
+        return redirect('admin/categories');
     }
 
     /**
@@ -92,7 +101,11 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::findOrFail($id);
+
+        return view('pages.admin.category.edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -102,9 +115,20 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        //
+        $data = $request->all();
+
+        $data['slug'] = Str::slug($request->name);
+
+        if ($request->file('image')) {
+            $data['image'] =  $request->file('image')->store('assets/category', 'public');
+        }
+
+        $category = Category::findOrFail($id);
+        $category->update($data);
+
+        return redirect('admin/categories');
     }
 
     /**
@@ -115,6 +139,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return redirect('admin/categories');
     }
 }
