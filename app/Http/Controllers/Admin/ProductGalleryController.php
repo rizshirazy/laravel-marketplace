@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ProductRequest;
+use App\Http\Requests\Admin\ProductGalleryRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductGallery;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
-class ProductController extends Controller
+class ProductGalleryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +23,7 @@ class ProductController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Product::with(['user', 'category']);
+            $query = ProductGallery::with(['product']);
 
             return DataTables::of($query)
                 ->addColumn('action', function ($item) {
@@ -34,9 +36,9 @@ class ProductController extends Controller
                                     Actions
                             </button>
                             <div class="dropdown-menu">
-                                <a  href="' . route('admin.products.edit', $item->id) . '" class="dropdown-item">
+                                <a  href="' . route('admin.galleries.edit', $item->id) . '" class="dropdown-item">
                                     Edit</a>
-                                <form action="' . route('admin.products.destroy', $item->id) . '" method="POST">
+                                <form action="' . route('admin.galleries.destroy', $item->id) . '" method="POST">
                                     ' . method_field('delete') . csrf_field() . '
                                     <button type="submit" class="dropdown-item text-danger">Remove</button>
                                 </form>
@@ -45,13 +47,13 @@ class ProductController extends Controller
                     </div>
                     ';
                 })
-                ->editColumn('price', function ($item) {
-                    return number_format($item->price, 2);
+                ->editColumn('image', function ($item) {
+                    return $item->image ? '<img src="' . Storage::url($item->image) . '" class="max-height: 80px"> ' : '';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'image'])
                 ->make();
         }
-        return view('pages.admin.product.index');
+        return view('pages.admin.product-gallery.index');
     }
 
     /**
@@ -61,12 +63,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $users = User::orderBy('name', 'asc')->get();
-        $categories = Category::orderBy('name', 'asc')->get();
+        $products = Product::all();
 
-        return view('pages.admin.product.create', [
-            'users' => $users,
-            'categories' => $categories,
+        return view('pages.admin.product-gallery.create', [
+            'products' => $products
         ]);
     }
 
@@ -76,14 +76,15 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(ProductGalleryRequest $request)
     {
         $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
 
-        Product::create($data);
+        $data['image'] = $request->file('image')->store('assets/products', 'public');
 
-        return redirect('admin/products');
+        ProductGallery::create($data);
+
+        return redirect('admin/galleries');
     }
 
     /**
@@ -105,15 +106,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
-        $users = User::orderBy('name', 'asc')->get();
-        $categories = Category::orderBy('name', 'asc')->get();
-
-        return view('pages.admin.product.edit', [
-            'users' => $users,
-            'product' => $product,
-            'categories' => $categories,
-        ]);
+        //
     }
 
     /**
@@ -123,15 +116,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $data['slug'] = Str::slug($request->name);
-
-        $product = Product::findOrFail($id);
-        $product->update($data);
-
-        return redirect('admin/products');
+        //
     }
 
     /**
@@ -142,9 +129,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
+        $gallery = ProductGallery::findOrFail($id);
+        $gallery->delete();
 
-        return redirect('admin/products');
+        return redirect('admin/galleries');
     }
 }

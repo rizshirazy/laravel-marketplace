@@ -31,6 +31,8 @@
                class="list-group-item list-group-item-action {{ (request()->is('admin')) ? 'active' : '' }}">Dashboard</a>
             <a href="{{ route('admin.products.index') }}"
                class="list-group-item list-group-item-action {{ (request()->is('admin/products*')) ? 'active' : '' }}">Products</a>
+            <a href="{{ route('admin.galleries.index') }}"
+               class="list-group-item list-group-item-action {{ (request()->is('admin/galleries*')) ? 'active' : '' }}">Galleries</a>
             <a href="{{ route('admin.categories.index') }}"
                class="list-group-item list-group-item-action {{ (request()->is('admin/categories*')) ? 'active' : '' }}">Categories</a>
             <a href="#"

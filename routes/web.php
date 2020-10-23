@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductGalleryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
@@ -54,5 +55,6 @@ Route::group(
         Route::resource('categories', AdminCategoryController::class)->names('admin.categories');
         Route::resource('users', UserController::class)->names('admin.users');
         Route::resource('products', ProductController::class)->names('admin.products');
+        Route::resource('galleries', ProductGalleryController::class)->names('admin.galleries');
     }
 );
