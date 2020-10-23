@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -50,5 +51,6 @@ Route::group(
     function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::resource('/categories', AdminCategoryController::class)->names('admin.categories');
+        Route::resource('/users', UserController::class)->names('admin.users');
     }
 );
