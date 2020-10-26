@@ -28,23 +28,10 @@ class ProductGalleryController extends Controller
             return DataTables::of($query)
                 ->addColumn('action', function ($item) {
                     return '
-                    <div class="btn-group">
-                        <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle mr-1 mb-1" 
-                                    type="button" 
-                                    data-toggle="dropdown">
-                                    Actions
-                            </button>
-                            <div class="dropdown-menu">
-                                <a  href="' . route('admin.galleries.edit', $item->id) . '" class="dropdown-item">
-                                    Edit</a>
-                                <form action="' . route('admin.galleries.destroy', $item->id) . '" method="POST">
-                                    ' . method_field('delete') . csrf_field() . '
-                                    <button type="submit" class="dropdown-item text-danger">Remove</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <form action="' . route('admin.galleries.destroy', $item->id) . '" method="POST">
+                        ' . method_field('delete') . csrf_field() . '
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
                     ';
                 })
                 ->editColumn('image', function ($item) {

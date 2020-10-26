@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class DetailController extends Controller
@@ -11,9 +12,18 @@ class DetailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($slug)
     {
-        return view('pages.detail');
+        $product = Product::with(['galleries'])
+            ->where('slug', $slug)
+            ->get();
+
+        return view(
+            'pages.detail',
+            [
+                'product' => $product
+            ]
+        );
     }
 
     /**

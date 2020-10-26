@@ -1,41 +1,17 @@
 @extends('layouts.app')
 
 @section('title')
-Store - Categories
+Store - {{ $category->name }}
 @endsection
 
 @section('content')
 <div class="page-content page-categories">
   <section class="store-trend-categories">
     <div class="container">
-      <div class="row">
-        <div class="col-12" data-aos="fade-up">
-          <h5>All Categories</h5>
+      <div class="row mb-5">
+        <div class="col" data-aos="fade-up">
+          <h4 class="m-0">{{ $category->name }}</h4>
         </div>
-      </div>
-      <div class="row">
-        @forelse ($categories as $category)
-        <div class="col-6 col-md-3 col-lg-2"
-             data-aos="fade-up"
-             data-aos-delay="{{ $loop->iteration * 100 }}">
-          <a class="component-categories d-block" href="{{ route('categories.show', $category->slug) }}">
-            <div class="categories-image">
-              <img src="{{ Storage::url($category->image) }}"
-                   alt="{{ $category->name }} Category"
-                   class="w-100" />
-            </div>
-            <p class="categories-text">
-              {{ $category->name }}
-            </p>
-          </a>
-        </div>
-        @empty
-        <div class="col-12 text-center py-5"
-             data-aos="fade-up"
-             data-aos-delay="100">
-          No Category Found.
-        </div>
-        @endforelse
       </div>
     </div>
   </section>
