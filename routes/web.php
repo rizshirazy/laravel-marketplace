@@ -39,7 +39,7 @@ Route::view('/register/success', 'auth.success')->name('register-success');
 
 Route::group(['prefix' => 'dashboard'], function () {
 
-    Route::get('/', [DashboardController::class, 'index'])->name('dasboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('/products', DashboardProductController::class)->names('dashboard.products');
 

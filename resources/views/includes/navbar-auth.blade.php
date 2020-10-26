@@ -21,7 +21,7 @@
                     <a class="nav-link" href="/">Home </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/categories.html">Categories</a>
+                    <a class="nav-link" href="{{ route('categories') }}">Categories</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Rewards</a>
