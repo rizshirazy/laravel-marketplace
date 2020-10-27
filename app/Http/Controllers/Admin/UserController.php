@@ -136,4 +136,9 @@ class UserController extends Controller
 
         return redirect('admin/users');
     }
+
+    public function check(Request $request)
+    {
+        return User::where('email', $request->email)->count() > 0 ? 'Unavailable' : 'Available';
+    }
 }

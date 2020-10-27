@@ -40,7 +40,9 @@ Store - Register
 							<label>Email</label>
 							<input id="email"
 										 type="email"
+										 @change="checkForEmailAvailability()"
 										 class="form-control @error('email') is-invalid @enderror"
+										 :class="{ 'is-invalid' : this.email_unavailable }"
 										 name="email"
 										 v-model="email"
 										 value="{{ old('email') }}"
@@ -140,7 +142,9 @@ Store - Register
 								@endforeach
 							</select>
 						</div>
-						<button type="submit" class="btn btn-success btn-block mt-4">
+						<button type="submit"
+										class="btn btn-success btn-block mt-4"
+										:disabled="this.email_unavailable">
 							Sign Up Now
 						</button>
 						<button type="submit" class="btn btn-signup btn-block mt-2">
@@ -157,6 +161,7 @@ Store - Register
 @push('addon-scripts')
 <script src="/vendor/vue/vue.js"></script>
 <script src="https://unpkg.com/vue-toasted"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
 	Vue.use(Toasted);
     
@@ -173,13 +178,51 @@ Store - Register
               //   }
               // );
             },
-            data: {
-              name: "Angga Hazza Sett",
-              email: "kamujagoan@bwa.id",
-              password: "",
-              is_store_open: true,
-              store_name: "",
-            },
+						methods: {
+							checkForEmailAvailability: function(){
+								const self = this;
+
+								axios.get("{{ route('api.register.check') }}", {
+												params: {
+													email: this.email
+												}
+											})
+										.then(function(res){
+												if (res.data == 'Available') {
+													self.$toasted.show(
+														"Email anda tersedia!",
+														{
+															position: "top-center",
+															className: "rounded",
+															duration: 2000,
+														}
+													);
+
+													self.email_unavailable = false;
+												} else {
+													self.$toasted.error(
+														"Maaf, tampaknya email sudah terdaftar pada sistem kami.",
+														{
+															position: "top-center",
+															className: "rounded",
+															duration: 3000,
+														}
+													);
+
+													self.email_unavailable = true;
+												}
+										});
+							}
+						},
+            data() {
+							return {
+									name: "",
+									email: "",
+									is_store_open: true,
+									store_name: "",
+									email_unavailable: false
+								}
+						} ,
           });
 </script>
 @endpush
