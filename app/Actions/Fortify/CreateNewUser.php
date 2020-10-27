@@ -30,12 +30,18 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
+            'store_name' => ['nullable', 'string', 'max:255'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'is_store_open' => ['required']
         ])->validate();
 
         return User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            'store_name' => isset($input['store_name']) ? $input['store_name'] : NULL,
+            'category_id' => isset($input['category_id']) ? $input['category_id'] : NULL,
+            'store_status' => isset($input['is_store_open']) ? 1 : 0,
         ]);
     }
 }

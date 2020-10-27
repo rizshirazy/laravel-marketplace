@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\Category;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 
@@ -37,7 +38,10 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
         Fortify::registerView(function () {
-            return view('auth.register');
+            $categories = Category::orderBy('name', 'asc')->get();
+            return view('auth.register', [
+                'categories' => $categories
+            ]);
         });
         Fortify::requestPasswordResetLinkView(function () {
             return view('auth.passwords.email');
@@ -45,6 +49,5 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetPasswordView(function ($request) {
             return view('auth.passwords.reset', ['request' => $request]);
         });
-        
     }
 }
