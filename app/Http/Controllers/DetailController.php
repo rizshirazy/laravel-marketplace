@@ -14,16 +14,13 @@ class DetailController extends Controller
      */
     public function index($slug)
     {
-        $product = Product::with(['galleries'])
+        $product = Product::with(['galleries', 'user'])
             ->where('slug', $slug)
-            ->get();
+            ->firstOrFail();
 
-        return view(
-            'pages.detail',
-            [
-                'product' => $product
-            ]
-        );
+        return view('pages.detail', [
+            'product' => $product
+        ]);
     }
 
     /**
