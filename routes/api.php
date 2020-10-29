@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Api\AddressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('register/check', [UserController::class, 'check'])->name('api.register.check');
+
+Route::get('provices', [AddressController::class, 'provinces'])->name('api.provinces');
+Route::get('regencies/{province_id?}', [AddressController::class, 'regencies'])->name('api.regencies');

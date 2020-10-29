@@ -32,7 +32,10 @@ Route::get('categories', [CategoryController::class, 'index'])->name('categories
 Route::get('categories/{slug}', [CategoryController::class, 'show'])->name('categories.show');
 
 Route::get('/details/{id}', [DetailController::class, 'index'])->name('details');
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
+
+Route::get('cart', [CartController::class, 'index'])->name('cart');
+Route::post('cart/{id}', [CartController::class, 'add'])->name('cart.add');
+Route::delete('cart/{id}', [CartController::class, 'delete'])->name('cart.delete');
 
 Route::get('/success', [CartController::class, 'success'])->name('success');
 Route::view('/register/success', 'auth.success')->name('register-success');
