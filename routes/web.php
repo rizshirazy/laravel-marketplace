@@ -27,34 +27,43 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-Route::get('categories', [CategoryController::class, 'index'])->name('categories');
-Route::get('categories/{slug}', [CategoryController::class, 'show'])->name('categories.show');
-
-Route::get('/details/{id}', [DetailController::class, 'index'])->name('details');
-
-Route::get('cart', [CartController::class, 'index'])->name('cart');
-Route::post('cart/{id}', [CartController::class, 'add'])->name('cart.add');
-Route::delete('cart/{id}', [CartController::class, 'delete'])->name('cart.delete');
-
 Route::get('/success', [CartController::class, 'success'])->name('success');
 Route::view('/register/success', 'auth.success')->name('register-success');
-
-Route::group(['prefix' => 'dashboard'], function () {
-
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
-    Route::resource('/products', DashboardProductController::class)->names('dashboard.products');
-
-    Route::get('/transaction', [DashboardTransactionController::class, 'index'])->name('dashboard.transactions');
-    Route::get('/transaction/{id}', [DashboardTransactionController::class, 'show'])->name('dashboard.transactions.show');
-
-    Route::get('/settings', [DashboardSettingController::class, 'store'])->name('dashboard.settings.store');
-    Route::get('/account', [DashboardSettingController::class, 'account'])->name('dashboard.settings.account');
-});
+Route::get('categories', [CategoryController::class, 'index'])->name('categories');
+Route::get('categories/{slug}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/details/{id}', [DetailController::class, 'index'])->name('details');
 
 Route::group(
-    ['prefix' => 'admin'],
+    [
+        'prefix' => 'cart',
+        'middleware' => ['auth']
+    ],
+    function () {
+        Route::get('/', [CartController::class, 'index'])->name('cart');
+        Route::post('/{id}', [CartController::class, 'add'])->name('cart.add');
+        Route::delete('/{id}', [CartController::class, 'delete'])->name('cart.delete');
+    }
+);
+
+Route::group(
+    [
+        'prefix' => 'dashboard'
+    ],
+    function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('/products', DashboardProductController::class)->names('dashboard.products');
+        Route::get('/transaction', [DashboardTransactionController::class, 'index'])->name('dashboard.transactions');
+        Route::get('/transaction/{id}', [DashboardTransactionController::class, 'show'])->name('dashboard.transactions.show');
+        Route::get('/settings', [DashboardSettingController::class, 'store'])->name('dashboard.settings.store');
+        Route::get('/account', [DashboardSettingController::class, 'account'])->name('dashboard.settings.account');
+    }
+);
+
+Route::group(
+    [
+        'prefix' => 'admin',
+        'middleware' => ['auth', 'admin']
+    ],
     function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::resource('categories', AdminCategoryController::class)->names('admin.categories');
