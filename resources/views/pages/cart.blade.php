@@ -8,8 +8,8 @@ Store - Cart
 @section('content')
 <div class="page-content page-cart">
 	<section class="store-breadcrumbs"
-					 data-aos="fade-down"
-					 data-aos-delay="100">
+			 data-aos="fade-down"
+			 data-aos-delay="100">
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
@@ -30,7 +30,7 @@ Store - Cart
 			<div class="row" data-aos="fade-up" data-aos-delay="100">
 				<div class="col-12 table-responsive">
 					<table class="table table-borderless table-cart"
-								 aria-describedby="Cart">
+						   aria-describedby="Cart">
 						<thead>
 							<tr>
 								<th scope="col">Image</th>
@@ -49,8 +49,8 @@ Store - Cart
 								<td style="width: 25%;">
 									@if ($item->product->galleries)
 									<img src="{{ Storage::url($item->product->galleries->first()->image) }}"
-											 alt=""
-											 class="cart-image" />
+										 alt=""
+										 class="cart-image" />
 									@endif
 								</td>
 								<td style="width: 35%;">
@@ -96,34 +96,38 @@ Store - Cart
 					<h2 class="mb-4">Shipping Details</h2>
 				</div>
 			</div>
-			<form action="" id="shippingForm">
+			<form action="{{ route('checkout') }}" id="shippingForm" enctype="multipart/form-data" method="POST">
+				@csrf
+
+				<input type="hidden" name="total_price" value="{{ $totalPrice }}">
 				<div class="row mb-2" data-aos="fade-up" data-aos-delay="200">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="address_one">Address 1</label>
 							<input type="text"
-										 class="form-control"
-										 id="address_one"
-										 name="address_one"
-										 value="{{ $user->address_one }}" />
+								   class="form-control"
+								   id="address_one"
+								   name="address_one"
+								   value="{{ $user->address_one }}" />
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="address_two">Address 2</label>
 							<input type="text"
-										 class="form-control"
-										 id="address_two"
-										 name="address_two"
-										 value="{{ $user->address_two }}" />
+								   class="form-control"
+								   id="address_two"
+								   name="address_two"
+								   value="{{ $user->address_two }}" />
 						</div>
 					</div>
 					<div class="col-md-4">
 						<div class="form-group">
 							<label for="province_id">Province</label>
-							<select name="province_id" id="province_id" class="form-control" v-if="provinces" v-model="province_id">
+							<select name="province_id" id="province_id" class="form-control" v-if="provinces"
+									v-model="province_id">
 								<option v-for="province in provinces"
-												:value="province.id">@{{ province.name }}</option>
+										:value="province.id">@{{ province.name }}</option>
 							</select>
 							<select v-else class="form-control"></select>
 						</div>
@@ -131,9 +135,10 @@ Store - Cart
 					<div class="col-md-4">
 						<div class="form-group">
 							<label for="regency_id">City</label>
-							<select name="regency_id" id="regency_id" class="form-control" v-if="regencies" v-model="regency_id">
+							<select name="regency_id" id="regency_id" class="form-control" v-if="regencies"
+									v-model="regency_id">
 								<option v-for="regency in regencies"
-												:value="regency.id">@{{ regency.name }}</option>
+										:value="regency.id">@{{ regency.name }}</option>
 							</select>
 							<select v-else class="form-control"></select>
 						</div>
@@ -142,31 +147,31 @@ Store - Cart
 						<div class="form-group">
 							<label for="zipcode">Postal Code</label>
 							<input type="text"
-										 class="form-control"
-										 id="zipcode"
-										 name="zipcode"
-										 value="{{ $user->zipcode	}}" />
+								   class="form-control"
+								   id="zipcode"
+								   name="zipcode"
+								   value="{{ $user->zipcode	}}" />
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="country">Country</label>
 							<input type="text"
-										 class="form-control"
-										 id="country"
-										 name="country"
-										 value="Indonesia"
-										 readonly />
+								   class="form-control"
+								   id="country"
+								   name="country"
+								   value="Indonesia"
+								   readonly />
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="phone_number">Mobile</label>
 							<input type="text"
-										 class="form-control"
-										 id="phone_number"
-										 name="phone_number"
-										 value="" />
+								   class="form-control"
+								   id="phone_number"
+								   name="phone_number"
+								   value="" />
 						</div>
 					</div>
 				</div>
@@ -203,10 +208,10 @@ Store - Cart
 					</div>
 					<div class="col-8 col-md-3">
 						@if (count($cart) > 0)
-						<a href="/success.html"
-							 class="btn btn-success mt-4 px-4 btn-block">
+						<button type="submit"
+								class="btn btn-success mt-4 px-4 btn-block">
 							Checkout Now
-						</a>
+						</button>
 						@endif
 					</div>
 				</div>

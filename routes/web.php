@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductGalleryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardProductController;
 use App\Http\Controllers\DashboardSettingController;
@@ -33,42 +34,31 @@ Route::get('categories', [CategoryController::class, 'index'])->name('categories
 Route::get('categories/{slug}', [CategoryController::class, 'show'])->name('categories.show');
 Route::get('/details/{id}', [DetailController::class, 'index'])->name('details');
 
-Route::group(
-    [
-        'prefix' => 'cart',
-        'middleware' => ['auth']
-    ],
-    function () {
+Route::post('callback', [CheckoutController::class, 'callback'])->name('midtrans.callback');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('checkout', [CheckoutController::class, 'process'])->name('checkout');
+
+    Route::prefix('cart')->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart');
         Route::post('/{id}', [CartController::class, 'add'])->name('cart.add');
         Route::delete('/{id}', [CartController::class, 'delete'])->name('cart.delete');
-    }
-);
+    });
 
-Route::group(
-    [
-        'prefix' => 'dashboard'
-    ],
-    function () {
+    Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('/products', DashboardProductController::class)->names('dashboard.products');
         Route::get('/transaction', [DashboardTransactionController::class, 'index'])->name('dashboard.transactions');
         Route::get('/transaction/{id}', [DashboardTransactionController::class, 'show'])->name('dashboard.transactions.show');
         Route::get('/settings', [DashboardSettingController::class, 'store'])->name('dashboard.settings.store');
         Route::get('/account', [DashboardSettingController::class, 'account'])->name('dashboard.settings.account');
-    }
-);
+    });
 
-Route::group(
-    [
-        'prefix' => 'admin',
-        'middleware' => ['auth', 'admin']
-    ],
-    function () {
+    Route::prefix('admin')->middleware('admin')->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
         Route::resource('categories', AdminCategoryController::class)->names('admin.categories');
         Route::resource('users', UserController::class)->names('admin.users');
         Route::resource('products', ProductController::class)->names('admin.products');
         Route::resource('galleries', ProductGalleryController::class)->names('admin.galleries');
-    }
-);
+    });
+});
