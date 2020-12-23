@@ -171,7 +171,7 @@ Store - Cart
 								   class="form-control"
 								   id="phone_number"
 								   name="phone_number"
-								   value="" />
+								   value="{{ $user->phone_number }}" />
 						</div>
 					</div>
 				</div>
@@ -199,7 +199,7 @@ Store - Cart
 						<div class="product-subtitle">Product Insurance</div>
 					</div>
 					<div class="col-4 col-md-2">
-						<div class="product-title">$580</div>
+						<div class="product-title">Rp. 0.00</div>
 						<div class="product-subtitle">Ship to Jakarta</div>
 					</div>
 					<div class="col-4 col-md-2">
@@ -230,12 +230,13 @@ Store - Cart
 			mounted() {
 				AOS.init();
 				this.getProvinces();
+				this.getRegencies();
 			},
 			data: {
 				provinces: null,
-				province_id: '',
+				province_id: {{ $user->province_id ?? '' }},
 				regencies: null,
-				regency_id: '',
+				regency_id: {{ $user->regency_id ?? '' }},
 			},
 			methods: {
 				getProvinces(){

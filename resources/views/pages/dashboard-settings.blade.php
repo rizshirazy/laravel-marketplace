@@ -17,30 +17,37 @@ Store Dashboard - Settings
     <div class="dashboard-content">
       <div class="row">
         <div class="col-12">
-          <form action="">
+          <form action="{{ route('dashboard.settings.update','dashboard.settings.store') }}" method="POST"
+                enctype="multipart/form-data">
+            @csrf
             <div class="card">
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="storeName">Store Name</label>
+                      <label for="store_name">Store Name</label>
                       <input type="text"
                              class="form-control"
-                             id="storeName"
-                             aria-describedby="emailHelp"
-                             name="storeName"
-                             value="Papel La Casa" />
+                             id="store_name"
+                             name="store_name"
+                             value="{{ $user->store_name }}" />
                     </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="category">Category</label>
-                      <select name="category"
-                              id="category"
+                      <label for="category_id">Category</label>
+                      <select name="category_id"
+                              id="category_id"
                               class="form-control">
-                        <option value="Furniture">Furniture</option>
+                        <option value="">-- Choose Category --</option>
+                        @foreach ($categories as $item)
+                        <option value="{{ $item->id }}"
+                                {{ $item->id == $user->category_id ? 'selected' : '' }}>
+                          {{ $item->name }}
+                        </option>
+                        @endforeach
                       </select>
                     </div>
                   </div>
@@ -48,26 +55,27 @@ Store Dashboard - Settings
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="is_store_open">Store Status</label>
+                      <label for="store_status">Store Status</label>
                       <p class="text-muted">
                         Apakah saat ini toko Anda buka?
                       </p>
                       <div class="custom-control custom-radio custom-control-inline">
                         <input class="custom-control-input"
                                type="radio"
-                               name="is_store_open"
+                               name="store_status"
                                id="openStoreTrue"
-                               value="true"
-                               checked />
+                               value="1"
+                               {{ $user->store_status == 1 ? 'checked' : '' }} />
                         <label class="custom-control-label"
                                for="openStoreTrue">Buka</label>
                       </div>
                       <div class="custom-control custom-radio custom-control-inline">
                         <input class="custom-control-input"
                                type="radio"
-                               name="is_store_open"
+                               name="store_status"
                                id="openStoreFalse"
-                               value="false" />
+                               value="0"
+                               {{ $user->store_status == 0 || $user->store_status == NULL ? 'checked' : '' }} />
                         <label makasih
                                class="custom-control-label"
                                for="openStoreFalse">Tutup Sementara</label>
