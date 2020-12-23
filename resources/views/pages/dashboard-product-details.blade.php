@@ -17,7 +17,20 @@ Store Dashboard - Product
     <div class="dashboard-content">
       <div class="row">
         <div class="col-12">
-          <form action="">
+
+          @if ($errors->any())
+          <div class="alert alert-danger">
+            <ul>
+              @foreach ($errors->all() as $error)
+              <li> {{ $error }} </li>
+              @endforeach
+            </ul>
+          </div>
+          @endif
+
+          <form action="{{ route('dashboard.products.update', $product->id)}}" method="POST"
+                enctype="multipart/form-data">
+            @csrf @method('PUT')
             <div class="card">
               <div class="card-body">
                 <div class="row">
@@ -28,8 +41,8 @@ Store Dashboard - Product
                              class="form-control"
                              id="name"
                              aria-describedby="name"
-                             name="storeName"
-                             value="Papel La Casa" />
+                             name="name"
+                             value="{{ $product->name }}" />
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -40,7 +53,21 @@ Store Dashboard - Product
                              id="price"
                              aria-describedby="price"
                              name="price"
-                             value="200" />
+                             value="{{ $product->price }}" />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="category_id">Category</label>
+                      <select name="category_id" id="category_id" class="form-control">
+                        <option value="" disabled>-- Choose Category --</option>
+                        @foreach ($categories as $item)
+                        <option value="{{ $item->id }}"
+                                {{ $item->id == $product->category_id ? 'selected' : '' }}>
+                          {{ $item->name }}
+                        </option>
+                        @endforeach
+                      </select>
                     </div>
                   </div>
                   <div class="col-md-12">
@@ -50,11 +77,7 @@ Store Dashboard - Product
                                 id="description"
                                 cols="30"
                                 rows="4"
-                                class="form-control">
-                        The Nike Air Max 720 SE goes bigger than ever before with Nike's tallest Air unit yet for
-                        unimaginable, all-day comfort. There's super breathable fabrics on the upper, while colours add
-                        a modern edge. Bring the past into the future with the Nike Air Max 2090, a bold look inspired
-                        by the DNA of the iconic Air Max 90. Brand-new Nike Air cushioning
+                                class="form-control">{!! $product->description !!}
                       </textarea>
                     </div>
                   </div>
@@ -75,45 +98,34 @@ Store Dashboard - Product
           <div class="card">
             <div class="card-body">
               <div class="row">
+                @foreach ($product->galleries as $gallery)
                 <div class="col-md-4">
                   <div class="gallery-container">
-                    <img src="/images/product-card-1.png"
+                    <img src="{{ Storage::url($gallery->image ?? '')}}"
                          alt=""
                          class="w-100" />
-                    <a class="delete-gallery" href="#">
+                    <a class="delete-gallery" href="{{ route('dashboard.gallery.remove', $gallery->id) }}">
                       <img src="/images/icon-delete.svg" alt="" />
                     </a>
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <div class="gallery-container">
-                    <img src="/images/product-card-2.png"
-                         alt=""
-                         class="w-100" />
-                    <a class="delete-gallery" href="#">
-                      <img src="/images/icon-delete.svg" alt="" />
-                    </a>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="gallery-container">
-                    <img src="/images/product-card-3.png"
-                         alt=""
-                         class="w-100" />
-                    <a class="delete-gallery" href="#">
-                      <img src="/images/icon-delete.svg" alt="" />
-                    </a>
-                  </div>
-                </div>
+                @endforeach
+              </div>
+              <div class="row">
                 <div class="col mt-3">
-                  <input type="file"
-                         id="file"
-                         style="display: none;"
-                         multiple />
-                  <button class="btn btn-secondary btn-block"
-                          onclick="thisFileUpload();">
-                    Add Photo
-                  </button>
+                  <form action="{{ route('dashboard.gallery.upload') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="file"
+                           id="image"
+                           name="image"
+                           style="display: none;"
+                           onchange="form.submit()" />
+                    <button type="button" class="btn btn-secondary btn-block"
+                            onclick="thisFileUpload();">
+                      Add Photo
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
@@ -129,7 +141,7 @@ Store Dashboard - Product
 <script src="https://cdn.ckeditor.com/4.15.0/standard/ckeditor.js"></script>
 <script>
   function thisFileUpload() {
-    document.getElementById("file").click();
+    document.getElementById("image").click();
   }
 
   CKEDITOR.replace("description");

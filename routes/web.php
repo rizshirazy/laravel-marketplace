@@ -48,6 +48,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('/products', DashboardProductController::class)->names('dashboard.products');
+        Route::post('products/gallery', [DashboardProductController::class, 'uploadGallery'])->name('dashboard.gallery.upload');
+        Route::get('products/gallery/{id}', [DashboardProductController::class, 'removeGallery'])->name('dashboard.gallery.remove');
         Route::get('/transaction', [DashboardTransactionController::class, 'index'])->name('dashboard.transactions');
         Route::get('/transaction/{id}', [DashboardTransactionController::class, 'show'])->name('dashboard.transactions.show');
         Route::get('/settings', [DashboardSettingController::class, 'store'])->name('dashboard.settings.store');
