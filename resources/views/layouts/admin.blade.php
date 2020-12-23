@@ -68,7 +68,7 @@
               <ul class="navbar-nav ml-auto d-none d-lg-flex">
                 <li class="nav-item dropdown">
                   <a class="nav-link"
-                     href="#"
+                     href="{{ route('admin.dashboard') }}"
                      id="navbarDropdown"
                      role="button"
                      data-toggle="dropdown"
@@ -77,18 +77,22 @@
                     <img src="/images/icon-user.png"
                          alt=""
                          class="rounded-circle mr-2 profile-picture" />
-                    Hi, Angga
+                    Hi, {{ Auth::user()->name }}
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/">Sign Out</a>
+                    <a class="dropdown-item" href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign Out</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none">
+                      @csrf
+                    </form>
                   </div>
                 </li>
               </ul>
               <!-- Mobile Menu -->
               <ul class="navbar-nav d-block d-lg-none mt-3">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    Hi, Angga
+                  <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                    Hi, {{ Auth::user()->name }}
                   </a>
                 </li>
               </ul>

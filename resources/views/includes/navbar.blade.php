@@ -83,12 +83,12 @@
         <!-- Mobile Menu -->
         <ul class="navbar-nav d-block d-lg-none">
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{{ route('dashboard') }}">
               Hi, {{ Auth::user()->name }}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link d-inline-block" href="#">
+            <a class="nav-link d-inline-block" href="{{ route('cart') }}">
               Cart
             </a>
           </li>

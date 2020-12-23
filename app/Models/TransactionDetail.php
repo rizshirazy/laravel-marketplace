@@ -31,4 +31,14 @@ class TransactionDetail extends Model
     protected $hidden = [
         //    
     ];
+
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
+    }
 }

@@ -26,16 +26,19 @@
             <img src="/images/dashboard-store-logo.svg" alt="" class="my-4" />
           </div>
           <div class="list-group list-group-flush">
-            <a href="/dashboard.html"
-               class="list-group-item list-group-item-action">Dashboard</a>
-            <a href="/dashboard-products.html"
-               class="list-group-item list-group-item-action">My Products</a>
-            <a href="/dashboard-transactions.html"
-               class="list-group-item list-group-item-action">Transactions</a>
-            <a href="/dashboard-settings.html"
-               class="list-group-item list-group-item-action">Store Settings</a>
-            <a href="/dashboard-account.html"
-               class="list-group-item list-group-item-action">My Account</a>
+            <a href="{{ route('dashboard') }}"
+               class="list-group-item list-group-item-action {{ (request()->is('dashboard')) ? 'active' : '' }}">Dashboard</a>
+            <a href="{{ route('dashboard.products.index') }}"
+               class="list-group-item list-group-item-action {{ (request()->is('dashboard/products*')) ? 'active' : '' }}">My
+              Products</a>
+            <a href="{{ route('dashboard.transactions') }}"
+               class="list-group-item list-group-item-action {{ (request()->is('dashboard/transaction*')) ? 'active' : '' }}">Transactions</a>
+            <a href="{{ route('dashboard.settings.store') }}"
+               class="list-group-item list-group-item-action {{ (request()->is('dashboard/settings')) ? 'active' : '' }}">Store
+              Settings</a>
+            <a href="{{ route('dashboard.settings.account') }}"
+               class="list-group-item list-group-item-action {{ (request()->is('dashboard/account')) ? 'active' : '' }}">My
+              Account</a>
           </div>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -87,20 +90,30 @@
                   </div>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link d-inline-block mt-2" href="#">
+                  <a class="nav-link d-inline-block mt-2" href="{{ route('cart') }}">
+                    @php
+                    $cart = \App\Models\Cart::where('user_id', Auth::user()->id)->count();
+                    @endphp
+
+                    @if ($cart > 0)
+                    <img src="/images/icon-cart-filled.svg" alt="" />
+                    <div class="cart-badge">{{ $cart }}</div>
+                    @else
                     <img src="/images/icon-cart-empty.svg" alt="" />
+                    @endif
                   </a>
                 </li>
               </ul>
+
               <!-- Mobile Menu -->
               <ul class="navbar-nav d-block d-lg-none mt-3">
                 <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    Hi, Angga
+                  <a class="nav-link" href="{{ route('dashboard') }}">
+                    Hi, {{ Auth::user()->name }}
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link d-inline-block" href="#">
+                  <a class="nav-link d-inline-block" href="{{ route('cart') }}">
                     Cart
                   </a>
                 </li>
